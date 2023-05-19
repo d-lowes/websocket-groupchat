@@ -5,7 +5,7 @@
 const urlParts = document.URL.split("/");
 const roomName = urlParts[urlParts.length - 1];
 const ws = new WebSocket(`ws://localhost:3000/chat/${roomName}`);
-
+const BASE_URL = "https://icanhazdadjoke.com/"
 
 const name = prompt("Username? (no spaces)");
 
@@ -54,12 +54,20 @@ ws.onclose = function (evt) {
 };
 
 
-/** send message when button pushed. */
+/** send message when button pushed if chat user type "/joke" send a joke as message. */
 
-$("form").submit(function (evt) {
+$("form").submit(async function (evt) {
   evt.preventDefault();
 
-  let data = { type: "chat", text: $("#m").val() };
+  let data;
+  if($("#m").val() === "/joke"){
+    const joke = await axios.get(BASE_URL, {headers: {"content-type": "application/json"}} )
+    console.log("JOKE:",joke)
+    data = { type: "chat", text: `${joke.data.joke}`}
+  } else {
+    data = { type: "chat", text: $("#m").val() }
+  }
+
   ws.send(JSON.stringify(data));
 
   $("#m").val("");
