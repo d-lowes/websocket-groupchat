@@ -53,17 +53,26 @@ ws.onclose = function (evt) {
   console.log("close", evt);
 };
 
-
-/** send message when button pushed if chat user type "/joke" send a joke as message. */
+/** send message when button pushed if chat user type "/joke" send a joke as
+ * message. */
 
 $("form").submit(async function (evt) {
   evt.preventDefault();
 
   let data;
+
   if($("#m").val() === "/joke"){
-    const joke = await axios.get(BASE_URL, {headers: {"content-type": "application/json"}} )
-    console.log("JOKE:",joke)
-    data = { type: "chat", text: `${joke.data.joke}`}
+    const joke = await axios.get(BASE_URL, {
+      headers: {
+      Accept: "application/json"
+      }
+    });
+
+    $("#messages").append(joke.data.joke).append("<br>")
+  } else if ($("#m").val() === "/message") {
+    // retrieve the list of users
+
+    // iterate through the list and append each user to the dom
   } else {
     data = { type: "chat", text: $("#m").val() }
   }

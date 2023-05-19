@@ -89,6 +89,11 @@ class ChatUser {
       text: `${this.name} left ${this.room.name}.`,
     });
   }
+
+  /** Get a list of members from the chat room */
+  getMembers() {
+    return this.room.members;
+  }
 }
 
 module.exports = ChatUser;
